@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Preview Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        iframe { width: 800px; height: 600px; border: 1px solid #ccc; }
+        .test-section { margin: 20px 0; padding: 20px; background: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <h1>Preview Debug Page</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Direct Embed URL</h2>
+        <p>Testing direct iframe embedding (replace FILE_ID with actual file ID):</p>
+        <iframe src="/embed/FILE_ID?preview=true"></iframe>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Sample Course (if uploaded)</h2>
+        <p>This will show error until you upload a file and replace the URL:</p>
+        <iframe src="/embed/test-id?preview=true"></iframe>
+    </div>
+    
+    <div class="test-section">
+        <h2>Debug Information</h2>
+        <button onclick="checkCourses()">Check Available Files</button>
+        <div id="debug-info"></div>
+    </div>
+    
+    <script>
+        async function checkCourses() {
+            try {
+                const response = await fetch('/api/files', {
+                    credentials: 'include'
+                });
+                
+                if (response.status === 401) {
+                    document.getElementById('debug-info').innerHTML = '<p style="color: red;">Not authenticated. Please login to admin panel first.</p>';
+                    return;
+                }
+                
+                const files = await response.json();
+                let html = '<h3>Available Files:</h3>';
+                
+                if (files.length === 0) {
+                    html += '<p>No files uploaded yet.</p>';
+                } else {
+                    html += '<ul>';
+                    files.forEach(file => {
+                        const embedUrl = `/embed/${file.id}?preview=true`;
+                        html += `<li>
+                            <strong>${file.originalName}</strong> (ID: ${file.id})<br>
+                            <a href="${embedUrl}" target="_blank">Open in new tab</a> | 
+                            <button onclick="testIframe('${file.id}')">Test in iframe below</button>
+                        </li>`;
+                    });
+                    html += '</ul>';
+                }
+                
+                html += '<div id="test-iframe-container"></div>';
+                document.getElementById('debug-info').innerHTML = html;
+            } catch (error) {
+                document.getElementById('debug-info').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+        
+        function testIframe(fileId) {
+            const container = document.getElementById('test-iframe-container');
+            container.innerHTML = `
+                <h4>Testing File: ${fileId}</h4>
+                <iframe src="/embed/${fileId}?preview=true" width="800" height="600" style="border: 2px solid #007bff;"></iframe>
+            `;
+        }
+        
+        // Check browser console for errors
+        window.addEventListener('message', function(event) {
+            console.log('Iframe message:', event.data);
+        });
+        
+        console.log('Debug page loaded. Check admin panel and upload files first.');
+    </script>
+</body>
+</html>

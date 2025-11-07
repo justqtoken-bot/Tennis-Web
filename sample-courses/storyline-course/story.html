@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storyline Course - Customer Service Training</title>
+    <link rel="stylesheet" href="story_content/storyline.css">
+    <style>
+        /* Storyline-like styling */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+        
+        #story {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .slide {
+            width: 900px;
+            height: 600px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .slide.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .slide-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .slide-header h1 {
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 300;
+        }
+        
+        .slide-content {
+            padding: 3rem;
+            height: calc(100% - 180px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .slide-text {
+            flex: 1;
+        }
+        
+        .slide-text h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .slide-text p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .slide-text ul {
+            color: #555;
+            line-height: 1.8;
+            margin-left: 2rem;
+        }
+        
+        .navigation-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #2c3e50;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            background: #3498db;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn:disabled {
+            background: #7f8c8d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .progress-container {
+            flex: 1;
+            margin: 0 2rem;
+        }
+        
+        .progress-bar {
+            background: #34495e;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #e74c3c, #f39c12);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            color: #bdc3c7;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+        
+        .quiz-container {
+            background: #ecf0f1;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        
+        .quiz-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+        
+        .quiz-option {
+            background: white;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+        
+        .quiz-option.selected {
+            border-color: #27ae60;
+            background: #d5edda;
+        }
+        
+        .scenario-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid #f39c12;
+        }
+        
+        .scenario-box h3 {
+            color: #d35400;
+            margin-bottom: 1rem;
+        }
+        
+        .character {
+            width: 150px;
+            height: 200px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 10px;
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        @media (max-width: 1000px) {
+            .slide {
+                width: 95vw;
+                height: 90vh;
+                margin: 2.5vh 2.5vw;
+            }
+            
+            .character {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="story">
+        <!-- Slide 1: Title -->
+        <div class="slide active" id="slide1">
+            <div class="slide-header">
+                <h1>🎯 Customer Service Excellence</h1>
+            </div>
+            <div class="slide-content">
+                <div class="slide-text">
+                    <h2>Welcome to Customer Service Training</h2>
+                    <p>This interactive course will teach you the essential skills for providing exceptional customer service that builds loyalty and drives business success.</p>
+                    <div class="scenario-box">
+                        <h3>🚀 What You'll Learn:</h3>
+                        <ul>
+                            <li>Active listening techniques</li>
+                            <li>Conflict resolution strategies</li>
+                            <li>Building rapport with customers</li>
+                            <li>Handling difficult situations</li>
+                        </ul>
+                    </div>
+                    <p><strong>Duration:</strong> Approximately 30 minutes</p>
+                </div>
+                <div class="character">👨‍💼</div>
+            </div>
+        </div>
+        
+        <!-- Slide 2: Content -->
+        <div class="slide" id="slide2">
+            <div class="slide-header">
+                <h1>🎯 Active Listening Skills</h1>
+            </div>
+            <div class="slide-content">
+                <div class="slide-text">
+                    <h2>The Foundation of Great Service</h2>
+                    <p>Active listening is more than just hearing words. It's about understanding the complete message being conveyed by your customer.</p>
+                    
+                    <div class="scenario-box">
+                        <h3>💡 Key Techniques:</h3>
+                        <ul>
+                            <li><strong>Give full attention:</strong> Make eye contact and avoid distractions</li>
+                            <li><strong>Ask clarifying questions:</strong> "Can you tell me more about..."</li>
+                            <li><strong>Paraphrase back:</strong> "So what I'm hearing is..."</li>
+                            <li><strong>Show empathy:</strong> "I understand how frustrating that must be"</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Remember: Customers want to feel heard and understood before you offer solutions.</p>
+                </div>
+                <div class="character">👂</div>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Quiz -->
+        <div class="slide" id="slide3">
+            <div class="slide-header">
+                <h1>🤔 Knowledge Check</h1>
+            </div>
+            <div class="slide-content">
+                <div class="quiz-container">
+                    <div class="quiz-question">
+                        A customer calls and says: "I'm really upset about my order being late again!" 
+                        What's the BEST first response?
+                    </div>
+                    
+                    <div class="quiz-option" onclick="selectOption(this, false)">
+                        "Let me look up your order number and see what happened."
+                    </div>
+                    
+                    <div class="quiz-option" onclick="selectOption(this, true)">
+                        "I can hear how frustrated you are about the delays. Can you tell me more about your experience?"
+                    </div>
+                    
+                    <div class="quiz-option" onclick="selectOption(this, false)">
+                        "We've been having some shipping issues lately. It's not our fault."
+                    </div>
+                    
+                    <div class="quiz-option" onclick="selectOption(this, false)">
+                        "I'm sure we can sort this out quickly for you."
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Completion -->
+        <div class="slide" id="slide4">
+            <div class="slide-header">
+                <h1>🎉 Course Complete!</h1>
+            </div>
+            <div class="slide-content">
+                <div class="slide-text">
+                    <h2>Congratulations!</h2>
+                    <p>You've successfully completed the Customer Service Excellence training module.</p>
+                    
+                    <div class="scenario-box">
+                        <h3>🏆 Key Takeaways:</h3>
+                        <ul>
+                            <li>Active listening builds trust and rapport</li>
+                            <li>Empathy comes before problem-solving</li>
+                            <li>Asking questions shows you care</li>
+                            <li>Every interaction is an opportunity to exceed expectations</li>
+                        </ul>
+                    </div>
+                    
+                    <p><strong>Next Steps:</strong> Practice these skills in your daily customer interactions and watch your satisfaction scores improve!</p>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <p style="background: #d5edda; padding: 1rem; border-radius: 8px; color: #155724;">
+                            ✅ <strong>This Storyline course is successfully running in a secure iframe!</strong><br>
+                            Perfect for integration into your community portal.
+                        </p>
+                    </div>
+                </div>
+                <div class="character">🌟</div>
+            </div>
+        </div>
+        
+        <!-- Navigation Bar -->
+        <div class="navigation-bar">
+            <button class="nav-btn" id="prevBtn" onclick="previousSlide()" disabled>← Previous</button>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 25%"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="currentSlide">1</span> of <span id="totalSlides">4</span>
+                </div>
+            </div>
+            <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next →</button>
+        </div>
+    </div>
+    
+    <script>
+        let currentSlideIndex = 0;
+        const totalSlides = 4;
+        let quizAnswered = false;
+        
+        function showSlide(index) {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Show current slide
+            document.getElementById(`slide${index + 1}`).classList.add('active');
+            
+            // Update navigation
+            document.getElementById('prevBtn').disabled = (index === 0);
+            document.getElementById('nextBtn').disabled = (index === 2 && !quizAnswered);
+            
+            if (index === totalSlides - 1) {
+                document.getElementById('nextBtn').textContent = '✅ Complete';
+                document.getElementById('nextBtn').disabled = false;
+            } else {
+                document.getElementById('nextBtn').textContent = 'Next →';
+            }
+            
+            // Update progress
+            const progress = ((index + 1) / totalSlides) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('currentSlide').textContent = index + 1;
+        }
+        
+        function nextSlide() {
+            if (currentSlideIndex < totalSlides - 1) {
+                currentSlideIndex++;
+                showSlide(currentSlideIndex);
+            } else {
+                // Course complete
+                alert('🎉 Course completed successfully!\n\nThis demonstrates how Storyline courses can be securely hosted and embedded in iframes for your community portal.');
+            }
+        }
+        
+        function previousSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                showSlide(currentSlideIndex);
+            }
+        }
+        
+        function selectOption(element, isCorrect) {
+            // Remove previous selections
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select current option
+            element.classList.add('selected');
+            quizAnswered = true;
+            
+            // Show feedback
+            setTimeout(() => {
+                if (isCorrect) {
+                    alert('✅ Correct! Great job!\n\nShowing empathy and asking for more information demonstrates active listening and helps build rapport with upset customers.');
+                } else {
+                    alert('❌ Not quite right.\n\nThe best approach is to first acknowledge the customer\'s feelings and ask for more information. This shows empathy and active listening.');
+                }
+                
+                // Enable next button
+                document.getElementById('nextBtn').disabled = false;
+            }, 500);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            showSlide(0);
+            document.getElementById('totalSlides').textContent = totalSlides;
+            
+            console.log('🎓 Storyline Course Loaded');
+            console.log('🔒 Running securely in iframe environment');
+            
+            // Simulate SCORM-like tracking
+            console.log('📊 Tracking: Course started');
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' && !document.getElementById('nextBtn').disabled) {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' && !document.getElementById('prevBtn').disabled) {
+                previousSlide();
+            }
+        });
+    </script>
+</body>
+</html>

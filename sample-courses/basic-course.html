@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample E-Learning Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .course-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .course-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .course-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .course-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .lesson {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .lesson h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .lesson p {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+        
+        .lesson ul {
+            margin-left: 2rem;
+            color: #555;
+        }
+        
+        .lesson li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 75%;
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .quiz-container {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .quiz-question {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #856404;
+        }
+        
+        .quiz-options {
+            list-style: none;
+            margin: 0;
+        }
+        
+        .quiz-options li {
+            margin: 0.5rem 0;
+        }
+        
+        .quiz-options input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+        
+        .iframe-info {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .iframe-info strong {
+            color: #155724;
+        }
+        
+        @media (max-width: 768px) {
+            .course-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .course-title {
+                font-size: 1.5rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="course-container">
+        <div class="course-header">
+            <h1 class="course-title">📚 Introduction to Web Security</h1>
+            <p class="course-subtitle">Learn the fundamentals of secure web development</p>
+        </div>
+        
+        <div class="iframe-info">
+            <strong>✅ This course is successfully embedded in an iframe!</strong><br>
+            Perfect for integration into your password-protected community portal.
+        </div>
+        
+        <div class="lesson">
+            <h2>🔐 Lesson 1: Understanding HTTPS</h2>
+            <p>HTTPS (HyperText Transfer Protocol Secure) is the secure version of HTTP. It uses SSL/TLS encryption to protect data transmitted between your browser and the web server.</p>
+            <p><strong>Key benefits of HTTPS:</strong></p>
+            <ul>
+                <li>Data encryption in transit</li>
+                <li>Authentication of the website</li>
+                <li>Data integrity protection</li>
+                <li>SEO benefits and user trust</li>
+            </ul>
+        </div>
+        
+        <div class="lesson">
+            <h2>🛡️ Lesson 2: Content Security Policy (CSP)</h2>
+            <p>Content Security Policy is a security standard that helps prevent XSS attacks by controlling which resources can be loaded by a web page.</p>
+            <p>CSP works by defining approved sources of content that browsers should be allowed to load on your website.</p>
+        </div>
+        
+        <div class="quiz-container">
+            <div class="quiz-question">🤔 Quick Quiz: What does HTTPS stand for?</div>
+            <ul class="quiz-options">
+                <li><input type="radio" name="https" id="q1a" value="a"><label for="q1a">HyperText Transfer Protocol Secure</label></li>
+                <li><input type="radio" name="https" id="q1b" value="b"><label for="q1b">HyperText Transfer Protocol Simple</label></li>
+                <li><input type="radio" name="https" id="q1c" value="c"><label for="q1c">HyperText Transfer Protocol Standard</label></li>
+            </ul>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <div class="navigation">
+            <button class="btn" disabled>← Previous</button>
+            <button class="btn" onclick="nextLesson()">Next Lesson →</button>
+        </div>
+    </div>
+    
+    <script>
+        let currentProgress = 75;
+        
+        function nextLesson() {
+            alert('🎉 Congratulations! You have completed this sample course.\n\nThis demonstrates how HTML content can be securely hosted and embedded in iframes for your community portal.');
+            
+            // Animate progress to 100%
+            const progressFill = document.querySelector('.progress-fill');
+            progressFill.style.width = '100%';
+            
+            // Disable next button
+            event.target.disabled = true;
+            event.target.textContent = '✅ Completed';
+        }
+        
+        // Quiz functionality
+        document.querySelectorAll('input[name="https"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'a') {
+                    alert('✅ Correct! HTTPS stands for HyperText Transfer Protocol Secure.');
+                } else {
+                    alert('❌ Not quite right. HTTPS stands for HyperText Transfer Protocol Secure.');
+                }
+            });
+        });
+        
+        // Simulate course interaction
+        console.log('📖 Sample E-Learning Course Loaded');
+        console.log('🔒 This course is running in a secure iframe environment');
+        
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate progress bar on load
+            setTimeout(() => {
+                const progressFill = document.querySelector('.progress-fill');
+                progressFill.style.width = currentProgress + '%';
+            }, 500);
+            
+            // Add click tracking
+            document.addEventListener('click', function(e) {
+                console.log('User interaction:', e.target.tagName, e.target.textContent);
+            });
+        });
+    </script>
+</body>
+</html>

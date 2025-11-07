@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Preview</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f0f0f0;
+        }
+        .preview-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        iframe { 
+            width: 100%; 
+            height: 600px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px;
+        }
+        .course-selector {
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 8px 16px;
+            margin-left: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .info {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <h1>Course Preview</h1>
+        
+        <div class="info">
+            <p><strong>Instructions:</strong> First, go to <a href="/admin" target="_blank">Admin Panel</a> and upload a course file (ZIP or HTML).</p>
+        </div>
+        
+        <div class="course-selector">
+            <label for="courseSelect">Select Course:</label>
+            <select id="courseSelect">
+                <option value="">Loading courses...</option>
+            </select>
+            <button onclick="loadCourse()">Preview</button>
+            <button onclick="refreshCourses()">Refresh List</button>
+        </div>
+        
+        <div id="preview-area">
+            <p style="text-align: center; color: #666; padding: 50px;">
+                Select a course above to preview it
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let courses = [];
+
+        async function loadCourses() {
+            try {
+                const response = await fetch('/api/files');
+                if (response.ok) {
+                    courses = await response.json();
+                    const select = document.getElementById('courseSelect');
+                    
+                    if (courses.length === 0) {
+                        select.innerHTML = '<option value="">No courses uploaded</option>';
+                    } else {
+                        select.innerHTML = '<option value="">Select a course...</option>' +
+                            courses.map(course => 
+                                `<option value="${course.id}">${course.originalName} (${course.type})</option>`
+                            ).join('');
+                    }
+                } else {
+                    document.getElementById('courseSelect').innerHTML = '<option value="">Error loading courses</option>';
+                }
+            } catch (error) {
+                console.error('Error loading courses:', error);
+                document.getElementById('courseSelect').innerHTML = '<option value="">Error loading courses</option>';
+            }
+        }
+
+        function loadCourse() {
+            const courseId = document.getElementById('courseSelect').value;
+            if (!courseId) {
+                alert('Please select a course first');
+                return;
+            }
+
+            const course = courses.find(c => c.id === courseId);
+            if (!course) {
+                alert('Course not found');
+                return;
+            }
+
+            document.getElementById('preview-area').innerHTML = 
+                `<h3>Previewing: ${course.originalName}</h3>
+                 <iframe src="/embed/${courseId}?preview=true"></iframe>`;
+        }
+
+        function refreshCourses() {
+            loadCourses();
+        }
+
+        // Load courses when page loads
+        loadCourses();
+    </script>
+</body>
+</html>

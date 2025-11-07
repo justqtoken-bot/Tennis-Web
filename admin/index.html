@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Secure HTML Hosting</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <div class="login-form">
+                    <h2><i class="fas fa-lock"></i> Admin Login</h2>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="dashboard" class="dashboard" style="display: none;">
+            <header class="dashboard-header">
+                <div class="header-content">
+                    <h1><i class="fas fa-server"></i> Secure HTML Hosting Dashboard</h1>
+                    <div class="header-actions">
+                        <button id="refreshBtn" class="btn btn-secondary">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button id="logoutBtn" class="btn btn-danger">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="dashboard-main">
+                <div class="dashboard-grid">
+                    <!-- Upload Section -->
+                    <div class="card upload-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-cloud-upload-alt"></i> Upload HTML Course</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="uploadForm" enctype="multipart/form-data">
+                                <div class="upload-area" id="uploadArea">
+                                    <div class="upload-content">
+                                        <i class="fas fa-file-upload"></i>
+                                        <p>Drag & drop your HTML or ZIP file here</p>
+                                        <p class="upload-note">or click to browse</p>
+                                        <input type="file" id="htmlFile" name="htmlFile" accept=".html,.htm,.zip" hidden>
+                                    </div>
+                                </div>
+                                <div class="upload-info" style="display: none;">
+                                    <div class="file-info">
+                                        <i class="fas fa-file"></i>
+                                        <span class="file-name"></span>
+                                        <span class="file-size"></span>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-upload"></i> Upload File
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="progress-bar" style="display: none;">
+                                <div class="progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="card stats-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-bar"></i> Statistics</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="totalFiles">0</div>
+                                    <div class="stat-label">Total Files</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="totalSize">0 MB</div>
+                                    <div class="stat-label">Storage Used</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="recentUploads">0</div>
+                                    <div class="stat-label">Recent Uploads</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Files Table -->
+                <div class="card files-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-folder-open"></i> Hosted Files</h3>
+                        <div class="search-box">
+                            <input type="text" id="searchFiles" placeholder="Search files...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="files-table">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Size</th>
+                                        <th>Upload Date</th>
+                                        <th>Embed URL</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="filesTableBody">
+                                    <tr class="no-files">
+                                        <td colspan="5">
+                                            <div class="empty-state">
+                                                <i class="fas fa-folder-open"></i>
+                                                <p>No files uploaded yet</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Notifications -->
+        <div id="notifications" class="notifications"></div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>File Preview</h3>
+                <button class="modal-close" onclick="closePreview()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="previewLoading" class="preview-loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading preview...</p>
+                </div>
+                <iframe id="previewFrame" src="" frameborder="0"></iframe>
+                <div id="previewError" class="preview-error" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Unable to load preview. The file may not be compatible with iframe preview.</p>
+                    <button class="btn btn-primary" onclick="openInNewTab()">Open in New Tab</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
